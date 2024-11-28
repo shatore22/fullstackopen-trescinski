@@ -13,10 +13,35 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [voted, setVote] = useState(Array(anecdotes.length).fill(0))
+
+  function getRandomInt(min, max) {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+  }
+  
+  const voteButton = () => {
+    const votesCopy = [...voted]
+    votesCopy[selected] += 1
+    setVote(votesCopy)
+  }
+
+  const mostVotes = Math.max(...voted)
+  const index = voted.indexOf(mostVotes)
 
   return (
     <div>
-      {anecdotes[selected]}
+      <h1>Anecdote of the day</h1>
+      {anecdotes[selected]} {voted[selected]} votes
+      <p></p>
+      <button onClick={() => voteButton()}>vote</button>
+      <button onClick={() => setSelected(getRandomInt(0, anecdotes.length))}>next anecdote</button>
+      <p></p>
+      <h1>Anecdote with most votes</h1>
+      {anecdotes[index]} {voted[index]} votes
+      
+
     </div>
   )
 }
