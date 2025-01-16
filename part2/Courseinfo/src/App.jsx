@@ -18,7 +18,7 @@ const App = () => {
   //     }
   // ]}
 
-  const course = [
+  const courses = [
     {
       name: 'Half Stack application development',
       id: 1,
@@ -62,12 +62,6 @@ const App = () => {
       ]
     }
   ]
-    return (
-      <Course.map(course =>
-        <li key={course.id}>
-          {course.parts}
-        </li>/>
-      )
-    )
+  return <Course course={courses} />
   }
 export default App
