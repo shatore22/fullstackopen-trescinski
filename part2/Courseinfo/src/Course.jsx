@@ -1,4 +1,3 @@
-import App from "./App"
 import Header from "./Header"
 import Total from "./Total"
 import Content from "./Content"
@@ -13,6 +12,7 @@ const Course = ({course}) => {
     // )
     return (
       <div>
+        <h1>Web Development Curriculum</h1>
         {course.map(value => (
           <div key={value.id}>
             <Header course={value.name}/>
