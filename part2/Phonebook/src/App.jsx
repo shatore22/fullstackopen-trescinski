@@ -11,6 +11,7 @@ const App = (props) => {
   }
 
   const addPerson = (event) => {
+    var i = 0;
     event.preventDefault()
     const personObject = {
       content: newPerson,
@@ -18,13 +19,17 @@ const App = (props) => {
     }
     
     persons.forEach(person => {
-      if(newPerson == person){
+      if(newPerson == person.content){
         alert(`${newPerson} is already added to phonebook`)
+        i = 1;
       }
     });
+    
+    if (i == 0){
+      setPersons(persons.concat(personObject))
+      setNewPerson('')
+    }
 
-    setPersons(persons.concat(personObject))
-    setNewPerson('')
   }
 
 
