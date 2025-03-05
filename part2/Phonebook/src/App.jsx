@@ -2,9 +2,15 @@ import { useState } from 'react'
 import Person from './components/Person'
 
 const App = (props) => {
-  const [persons, setPersons] = useState(props.persons || []) 
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+  ])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
+  const [filter, setFilter] = useState('');
 
   const handleNameChange = (event) => {    
     setNewName(event.target.value)  
@@ -13,6 +19,10 @@ const App = (props) => {
   const handleNumberChange = (event) => {
     setNewNumber(event.target.value)
   }
+  
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -32,9 +42,17 @@ const App = (props) => {
     setNewNumber('')
   }
 
+  const filteredPersons = persons.filter(person =>
+    person.name.toLowerCase().includes(filter.toLowerCase())
+  );
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+            Filter: <input value={filter} onChange={handleFilterChange}/>
+          </div>
+          <h2>add a new</h2>
       <div>
         <form onSubmit={addPerson}>        
           <div>
@@ -48,9 +66,9 @@ const App = (props) => {
       </div>
       <h2>Numbers</h2>
       <ul>
-        {persons.map(person =>
+      {filteredPersons.map(person => (
           <Person key={person.id} person={person} />
-        )}
+        ))}
       </ul>
     </div>
   )
