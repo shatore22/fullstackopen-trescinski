@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios'
+import personsService from './services/persons'; 
 import Person from './components/Person';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
@@ -11,13 +11,13 @@ const App = (props) => {
   const [filter, setFilter] = useState('');
 
   useEffect(() => {
-    console.log('effect')
-    axios
-      .get('http://localhost:3001/persons').then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personsService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons);
       })
-  }, [])
+      .catch(error => console.error('Error fetching persons:', error));
+  }, []);
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -44,9 +44,26 @@ const App = (props) => {
       return;
     }
     
-    setPersons(persons.concat(personObject));
-    setNewName('');
-    setNewNumber('');
+    personsService
+    .create(personObject)
+    .then(returnedPerson => {
+      setPersons(persons.concat(returnedPerson));
+      setNewName('');
+      setNewNumber('');
+    })
+  };
+
+  const deletePerson = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personsService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id));
+        })
+        .catch(error => {
+          console.error('Error deleting person:', error);
+        });
+    }
   };
 
   const filteredPersons = persons.filter(person =>
@@ -68,7 +85,10 @@ const App = (props) => {
       <h2>Numbers</h2>
       <ul>
         {filteredPersons.map(person => (
-          <Person key={person.id} person={person} />
+          <li key={person.id}>
+          {person.name} {person.number} 
+          <button onClick={() => deletePerson(person.id, person.name)}>delete</button>
+        </li>
         ))}
       </ul>
     </div>
